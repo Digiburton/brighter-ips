@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>BRIGHTER – Integrated Pain Solutions</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{background:linear-gradient(160deg,#0D1B3E 0%,#162847 60%,#0a1628 100%);min-height:100vh;font-family:'DM Sans','Segoe UI',sans-serif;color:#fff;padding-bottom:60px;}
+  .header{background:rgba(255,255,255,0.04);border-bottom:3px solid #D4A017;padding:16px 20px;display:flex;align-items:center;gap:12;position:sticky;top:0;z-index:99;}
+  .logo{width:36px;height:36px;background:#D4A017;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#0D1B3E;flex-shrink:0;}
+  .header-text{flex:1;margin-left:12px;}
+  .brand{font-weight:800;font-size:14px;letter-spacing:1px;}
+  .site{color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px;}
+  .step-badge{color:#D4A017;font-size:12px;font-weight:700;}
+  .progress-bar{height:5px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;margin:10px 20px 0;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#1A7A9E,#D4A017);border-radius:99px;transition:width 0.4s;}
+  .card{background:rgba(255,255,255,0.06);backdrop-filter:blur(12px);border-radius:20px;border:1px solid rgba(255,255,255,0.1);padding:24px 20px;margin:16px;}
+  .step-label{color:#D4A017;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+  .title{font-size:21px;font-weight:800;margin-bottom:18px;}
+  label{display:block;color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;margin-bottom:6px;}
+  select{width:100%;background:#fff;border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;color:#0D1B3E;font-size:16px;padding:14px 16px;outline:none;font-family:inherit;}
+  input[type=time]{width:100%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;color:#fff;font-size:16px;padding:14px 16px;outline:none;font-family:inherit;margin-top:16px;}
+  .btn{width:100%;background:#D4A017;color:#0D1B3E;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;margin-top:12px;font-family:inherit;letter-spacing:0.3px;}
+  .btn:disabled{opacity:0.4;cursor:not-allowed;}
+  .btn-outline{width:100%;background:transparent;color:rgba(255,255,255,0.5);border:1.5px solid rgba(255,255,255,0.15);border-radius:14px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;font-family:inherit;}
+  .section-hint{color:rgba(255,255,255,0.5);font-size:13px;margin-bottom:18px;}
+  .prog-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+  .prog-label{color:rgba(255,255,255,0.5);font-size:12px;}
+  .prog-count{color:#D4A017;font-size:12px;font-weight:700;}
+  .prog-track{height:6px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;margin-bottom:16px;}
+  .prog-inner{height:100%;background:linear-gradient(90deg,#1A7A9E,#D4A017);border-radius:99px;transition:width 0.3s;}
+  .area-card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:16px;padding:14px;margin-bottom:10px;transition:all 0.2s;}
+  .area-card.done{background:rgba(26,122,158,0.22);border-color:#1A7A9E;}
+  .area-card.miss{background:rgba(180,40,40,0.18);border-color:rgba(220,60,60,0.6);}
+  .area-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .area-num{width:30px;height:30px;background:rgba(212,160,23,0.2);border:1.5px solid #D4A017;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#D4A017;font-weight:800;font-size:13px;flex-shrink:0;}
+  .area-name{font-weight:700;font-size:15px;flex:1;}
+  .area-icon{font-size:18px;}
+  .btn-row{display:flex;gap:8px;}
+  .area-btn{flex:1;padding:10px 0;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);transition:all 0.15s;font-family:inherit;}
+  .area-btn.active-done{background:#1A7A9E;color:#fff;}
+  .area-btn.active-miss{background:#c0392b;color:#fff;}
+  textarea.note{width:100%;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:rgba(255,255,255,0.85);font-size:13px;padding:8px 12px;margin-top:10px;outline:none;resize:none;font-family:inherit;display:none;}
+  textarea.note.visible{display:block;}
+  .supply-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .supply-label{color:#fff;font-size:14px;font-weight:600;flex:1;}
+  .supply-qty{width:65px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;padding:8px 10px;outline:none;text-align:center;font-family:inherit;}
+  .low-btn{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);font-size:15px;cursor:pointer;flex-shrink:0;}
+  .low-btn.active{background:#c0392b;color:#fff;}
+  .col-hints{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;}
+  .col-hint{color:rgba(255,255,255,0.4);font-size:11px;}
+  .pill{border-radius:99px;padding:5px 13px;font-size:13px;font-weight:700;display:inline-block;margin:3px;}
+  .pill-teal{background:rgba(26,122,158,0.2);border:1px solid #1A7A9E;color:#1A7A9E;}
+  .pill-gold{background:rgba(212,160,23,0.15);border:1px solid #D4A017;color:#D4A017;}
+  .pill-red{background:rgba(180,40,40,0.2);border:1px solid #e74c3c;color:#e74c3c;}
+  .review-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .dot-green{background:#1A7A9E;}
+  .dot-red{background:#e74c3c;}
+  .review-name{font-size:14px;flex:1;}
+  .review-status{font-size:12px;font-weight:700;}
+  .status-ok{color:#1A7A9E;}
+  .status-bad{color:#e74c3c;}
+  .alert-box{background:rgba(180,40,40,0.15);border:1px solid rgba(220,60,60,0.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+  .alert-title{color:#e74c3c;font-weight:700;font-size:13px;margin-bottom:8px;}
+  .alert-item{color:rgba(255,255,255,0.7);font-size:13px;margin-bottom:4px;}
+  .info-box{background:rgba(255,255,255,0.05);border-radius:12px;padding:12px 16px;margin-bottom:16px;color:rgba(255,255,255,0.5);font-size:12px;}
+  .success-icon{width:80px;height:80px;background:linear-gradient(135deg,#1A7A9E,#D4A017);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;}
+  .success-title{font-size:24px;font-weight:800;text-align:center;margin-bottom:8px;}
+  .success-sub{color:rgba(255,255,255,0.6);font-size:14px;text-align:center;margin-bottom:24px;}
+  .confirm-box{background:rgba(26,122,158,0.15);border:1px solid rgba(26,122,158,0.4);border-radius:12px;padding:12px 16px;margin-bottom:20px;}
+  .confirm-who{color:rgba(255,255,255,0.5);font-size:12px;}
+  .confirm-name{color:#fff;font-weight:700;font-size:15px;}
+  .confirm-time{color:rgba(255,255,255,0.4);font-size:12px;margin-top:2px;}
+  .recent-title{color:#D4A017;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+  .recent-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .recent-worker{color:#fff;font-size:14px;font-weight:600;}
+  .recent-time{color:rgba(255,255,255,0.4);font-size:12px;}
+  .section-sep{color:#D4A017;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:14px 0 8px;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">B</div>
+  <div class="header-text">
+    <div class="brand">BRIGHTER</div>
+    <div class="site">Integrated Pain Solutions · Fairfield OH</div>
+  </div>
+  <div class="step-badge" id="stepBadge"></div>
+</div>
+<div class="progress-bar" id="topProgressBar" style="display:none">
+  <div class="progress-fill" id="topProgressFill" style="width:0%"></div>
+</div>
+
+<!-- STEP 1: WORKER -->
+<div id="step1" class="card">
+  <div class="step-label">Step 1 of 4</div>
+  <div class="title">Who's closing tonight?</div>
+  <label>Your Name</label>
+  <select id="workerSelect">
+    <option value="">Select your name...</option>
+    <option value="Lewis Burton">Lewis Burton</option>
+  </select>
+  <label style="margin-top:16px">Time In</label>
+  <input type="time" id="timeIn"/>
+  <button class="btn" id="btnStep1" disabled onclick="goStep(2)">Start Checklist →</button>
+</div>
+
+<!-- STEP 2: AREAS -->
+<div id="step2" class="card hidden">
+  <div class="step-label">Step 2 of 4</div>
+  <div class="title">Area Completion</div>
+  <div class="section-hint">Mark each area complete or incomplete. Add a note if anything was missed.</div>
+  <div class="prog-row"><span class="prog-label">Progress</span><span class="prog-count" id="areaCount">0 / 11</span></div>
+  <div class="prog-track"><div class="prog-inner" id="areaProgress" style="width:0%"></div></div>
+  <div id="areaList"></div>
+  <button class="btn" id="btnStep2" disabled onclick="goStep(3)">Next: Supplies →</button>
+  <button class="btn-outline" onclick="goStep(1)">← Back</button>
+</div>
+
+<!-- STEP 3: SUPPLIES -->
+<div id="step3" class="card hidden">
+  <div class="step-label">Step 3 of 4</div>
+  <div class="title">Supply Count</div>
+  <div class="section-hint">Enter quantity remaining. Tap ⚠ if stock is low.</div>
+  <div class="col-hints">
+    <span class="col-hint">QTY</span>
+    <span class="col-hint" style="width:36px;text-align:center">LOW</span>
+  </div>
+  <div id="supplyList"></div>
+  <button class="btn" onclick="goStep(4)" style="margin-top:20px">Review & Submit →</button>
+  <button class="btn-outline" onclick="goStep(2)">← Back</button>
+</div>
+
+<!-- STEP 4: REVIEW -->
+<div id="step4" class="card hidden">
+  <div class="step-label">Step 4 of 4</div>
+  <div class="title">Review & Submit</div>
+  <div id="reviewPills" style="margin-bottom:18px;flex-wrap:wrap;display:flex;gap:6px;"></div>
+  <div class="section-sep">Areas</div>
+  <div id="reviewAreas"></div>
+  <div id="reviewAlerts" style="margin-top:14px;"></div>
+  <div class="info-box" style="margin-top:14px;">📧 A summary will be emailed to your supervisor automatically.</div>
+  <button class="btn" id="btnSubmit" onclick="handleSubmit()">✓ Submit Checklist</button>
+  <button class="btn-outline" onclick="goStep(3)">← Back</button>
+</div>
+
+<!-- STEP 5: DONE -->
+<div id="step5" class="card hidden" style="text-align:center">
+  <div class="success-icon">✓</div>
+  <div class="success-title">Submitted!</div>
+  <div class="success-sub">Great work tonight. Your supervisor has been notified.</div>
+  <div id="doneAlerts"></div>
+  <div class="confirm-box" style="text-align:left">
+    <div class="confirm-who">Submitted by</div>
+    <div class="confirm-name" id="doneWorker"></div>
+    <div class="confirm-time" id="doneTime"></div>
+  </div>
+  <button class="btn" onclick="resetApp()">Start New Checklist</button>
+</div>
+
+<script>
+const SITE = "Integrated Pain Solutions";
+const ADDRESS = "2818 Mack Rd, Fairfield OH 45014";
+const SERVICE_ID = "service_76hth4j";
+const TEMPLATE_ID = "template_9brmuyp";
+const PUBLIC_KEY = "GSa9qU_kdNN3bVXmB";
+
+const AREAS = [
+  {id:1,name:"Conference Room",icon:"🖥️"},
+  {id:2,name:"Entrance Area",icon:"🚪"},
+  {id:3,name:"Hallways",icon:"🛤️"},
+  {id:4,name:"Janitor's Closet",icon:"🧹"},
+  {id:5,name:"Nurses Stations",icon:"💉"},
+  {id:6,name:"Open Space Offices",icon:"💼"},
+  {id:7,name:"Patient / Exam Rooms",icon:"🏥"},
+  {id:8,name:"Receptionist Area",icon:"📋"},
+  {id:9,name:"Restrooms",icon:"🚻"},
+  {id:10,name:"Stairwells",icon:"🪜"},
+  {id:11,name:"Waiting Area",icon:"🛋️"},
+];
+const SUPPLIES = [
+  {id:"liners",label:"Trash liners"},
+  {id:"tp",label:"Toilet paper rolls"},
+  {id:"towels",label:"Paper towels"},
+  {id:"soap",label:"Hand soap"},
+  {id:"disinfect",label:"Disinfectant / cleaning solution"},
+  {id:"feminine",label:"Feminine hygiene products"},
+  {id:"dispensers",label:"Other dispenser supplies"},
+  {id:"mopheads",label:"Mop heads"},
+  {id:"rags",label:"Rags / microfiber cloths"},
+];
+
+let areaState = {};
+let supplyState = {};
+AREAS.forEach(a => areaState[a.id] = {done:null,note:""});
+SUPPLIES.forEach(s => supplyState[s.id] = {qty:"",low:false});
+
+// Build area cards
+const areaList = document.getElementById("areaList");
+AREAS.forEach(a => {
+  const card = document.createElement("div");
+  card.className = "area-card";
+  card.id = "acard-"+a.id;
+  card.innerHTML = `
+    <div class="area-top">
+      <div class="area-num">${a.id}</div>
+      <div class="area-name">${a.name}</div>
+      <div class="area-icon">${a.icon}</div>
+    </div>
+    <div class="btn-row">
+      <button class="area-btn" id="done-${a.id}" onclick="markArea(${a.id},true)">✓ Complete</button>
+      <button class="area-btn" id="miss-${a.id}" onclick="markArea(${a.id},false)">✗ Incomplete</button>
+    </div>
+    <textarea class="note" id="note-${a.id}" rows="2" placeholder="What was missed or needs attention..." oninput="areaState[${a.id}].note=this.value"></textarea>
+  `;
+  areaList.appendChild(card);
+});
+
+// Build supply rows
+const supplyList = document.getElementById("supplyList");
+SUPPLIES.forEach(s => {
+  const row = document.createElement("div");
+  row.className = "supply-row";
+  row.innerHTML = `
+    <div class="supply-label">${s.label}</div>
+    <input class="supply-qty" type="text" placeholder="—" oninput="supplyState['${s.id}'].qty=this.value" id="sqty-${s.id}"/>
+    <button class="low-btn" id="slow-${s.id}" onclick="toggleLow('${s.id}')">⚠</button>
+  `;
+  supplyList.appendChild(row);
+});
+
+function markArea(id, val) {
+  const prev = areaState[id].done;
+  areaState[id].done = (prev === val) ? null : val;
+  const card = document.getElementById("acard-"+id);
+  const doneBtn = document.getElementById("done-"+id);
+  const missBtn = document.getElementById("miss-"+id);
+  const note = document.getElementById("note-"+id);
+  card.className = "area-card" + (areaState[id].done === true ? " done" : areaState[id].done === false ? " miss" : "");
+  doneBtn.className = "area-btn" + (areaState[id].done === true ? " active-done" : "");
+  missBtn.className = "area-btn" + (areaState[id].done === false ? " active-miss" : "");
+  note.className = "note" + (areaState[id].done === false ? " visible" : "");
+  updateAreaProgress();
+}
+
+function updateAreaProgress() {
+  const done = AREAS.filter(a => areaState[a.id].done !== null).length;
+  document.getElementById("areaCount").textContent = done + " / " + AREAS.length;
+  document.getElementById("areaProgress").style.width = ((done/AREAS.length)*100)+"%";
+  document.getElementById("btnStep2").disabled = done < AREAS.length;
+}
+
+function toggleLow(id) {
+  supplyState[id].low = !supplyState[id].low;
+  const btn = document.getElementById("slow-"+id);
+  btn.className = "low-btn" + (supplyState[id].low ? " active" : "");
+}
+
+function nowStr() {
+  return new Date().toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit",hour12:true});
+}
+
+function goStep(n) {
+  [1,2,3,4,5].forEach(i => document.getElementById("step"+i).classList.add("hidden"));
+  document.getElementById("step"+n).classList.remove("hidden");
+  const badge = document.getElementById("stepBadge");
+  const bar = document.getElementById("topProgressBar");
+  if(n>1 && n<5){
+    badge.textContent = (n-1)+"/4";
+    bar.style.display="block";
+    document.getElementById("topProgressFill").style.width = (((n-1)/4)*100)+"%";
+  } else {
+    badge.textContent="";
+    bar.style.display="none";
+  }
+  if(n===4) buildReview();
+  window.scrollTo(0,0);
+}
+
+function buildReview() {
+  const worker = document.getElementById("workerSelect").value;
+  const timeIn = document.getElementById("timeIn").value;
+  const incomplete = AREAS.filter(a => areaState[a.id].done === false);
+  const lowSup = SUPPLIES.filter(s => supplyState[s.id].low);
+
+  // Pills
+  const pills = document.getElementById("reviewPills");
+  pills.innerHTML = `
+    <span class="pill pill-teal">👤 ${worker}</span>
+    <span class="pill pill-gold">🕐 ${timeIn||"—"}</span>
+    ${incomplete.length>0?`<span class="pill pill-red">⚠ ${incomplete.length} incomplete</span>`:""}
+    ${lowSup.length>0?`<span class="pill pill-red">⚠ ${lowSup.length} low supplies</span>`:""}
+  `;
+
+  // Areas
+  const ra = document.getElementById("reviewAreas");
+  ra.innerHTML = AREAS.map(a => `
+    <div class="review-row">
+      <div class="dot ${areaState[a.id].done===true?"dot-green":"dot-red"}"></div>
+      <div class="review-name">${a.name}</div>
+      <div class="review-status ${areaState[a.id].done===true?"status-ok":"status-bad"}">${areaState[a.id].done===true?"Complete":"Incomplete"}</div>
+    </div>
+  `).join("");
+
+  // Alerts
+  const alerts = document.getElementById("reviewAlerts");
+  let html = "";
+  if(lowSup.length>0){
+    html += `<div class="alert-box"><div class="alert-title">⚠ Low Stock</div>${lowSup.map(s=>`<div class="alert-item">• ${s.label}</div>`).join("")}</div>`;
+  }
+  alerts.innerHTML = html;
+}
+
+function buildEmailBody() {
+  const worker = document.getElementById("workerSelect").value;
+  const timeIn = document.getElementById("timeIn").value;
+  const ts = nowStr();
+  const incomplete = AREAS.filter(a => areaState[a.id].done === false);
+  const lowSup = SUPPLIES.filter(s => supplyState[s.id].low);
+  let body = `BRIGHTER — Nightly Checklist\n${"=".repeat(40)}\n`;
+  body += `Site: ${SITE} · ${ADDRESS}\nWorker: ${worker}\nTime In: ${timeIn||"—"}\nSubmitted: ${ts}\n\n`;
+  body += `AREA STATUS\n${"-".repeat(30)}\n`;
+  AREAS.forEach(a => {
+    const st = areaState[a.id];
+    body += `${a.name}: ${st.done===true?"✅ COMPLETE":"❌ INCOMPLETE"}`;
+    if(st.note) body += ` — ${st.note}`;
+    body += "\n";
+  });
+  body += `\nSUPPLY COUNT\n${"-".repeat(30)}\n`;
+  SUPPLIES.forEach(s => {
+    const v = supplyState[s.id];
+    body += `${s.label}: ${v.qty||"—"}${v.low?" ⚠ LOW":""}\n`;
+  });
+  if(incomplete.length>0) body += `\n⚠ INCOMPLETE: ${incomplete.map(a=>a.name).join(", ")}\n`;
+  if(lowSup.length>0) body += `⚠ LOW SUPPLIES: ${lowSup.map(s=>s.label).join(", ")}\n`;
+  return body;
+}
+
+async function handleSubmit() {
+  const btn = document.getElementById("btnSubmit");
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+  const worker = document.getElementById("workerSelect").value;
+  const ts = nowStr();
+
+  try {
+    await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        service_id: SERVICE_ID,
+        template_id: TEMPLATE_ID,
+        user_id: PUBLIC_KEY,
+        template_params: {
+          worker_name: worker,
+          submitted_at: ts,
+          checklist_body: buildEmailBody(),
+          incomplete_count: AREAS.filter(a=>areaState[a.id].done===false).length,
+          low_supply_count: SUPPLIES.filter(s=>supplyState[s.id].low).length,
+        }
+      })
+    });
+  } catch(e) { console.log("Email error",e); }
+
+  document.getElementById("doneWorker").textContent = worker;
+  document.getElementById("doneTime").textContent = ts;
+
+  const incomplete = AREAS.filter(a => areaState[a.id].done === false);
+  const doneAlerts = document.getElementById("doneAlerts");
+  if(incomplete.length>0){
+    doneAlerts.innerHTML = `<div class="alert-box" style="text-align:left;margin-bottom:16px"><div class="alert-title">Flagged for supervisor:</div>${incomplete.map(a=>`<div class="alert-item">• ${a.name}</div>`).join("")}</div>`;
+  }
+
+  goStep(5);
+}
+
+function resetApp() {
+  AREAS.forEach(a => { areaState[a.id]={done:null,note:""}; });
+  SUPPLIES.forEach(s => { supplyState[s.id]={qty:"",low:false}; });
+  document.getElementById("workerSelect").value="";
+  document.getElementById("timeIn").value="";
+  AREAS.forEach(a => {
+    document.getElementById("acard-"+a.id).className="area-card";
+    document.getElementById("done-"+a.id).className="area-btn";
+    document.getElementById("miss-"+a.id).className="area-btn";
+    document.getElementById("note-"+a.id).className="note";
+    document.getElementById("note-"+a.id).value="";
+  });
+  SUPPLIES.forEach(s => {
+    document.getElementById("sqty-"+s.id).value="";
+    document.getElementById("slow-"+s.id).className="low-btn";
+  });
+  updateAreaProgress();
+  document.getElementById("btnStep1").disabled=true;
+  document.getElementById("btnSubmit").disabled=false;
+  document.getElementById("btnSubmit").textContent="✓ Submit Checklist";
+  document.getElementById("doneAlerts").innerHTML="";
+  goStep(1);
+}
+
+// Worker select enable start button
+document.getElementById("workerSelect").addEventListener("change", function(){
+  document.getElementById("btnStep1").disabled = !this.value;
+});
+</script>
+</body>
+</html>
